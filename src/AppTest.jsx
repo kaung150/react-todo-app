@@ -1,58 +1,48 @@
 import React, { useState } from 'react'
 import {motion} from 'framer-motion'
 
+
 export const App = () => {
 
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: 'Finished React Series',
-      isComplete: false,
-    },
+    const [todos, setTodos] = useState([
+        {
+            id: 1,
+            title: 'To conquer the world',
+            isComplete: false,
+        },
+        {
+            id: 2, 
+            title: 'To beat the assholes',
+            isComplete: false,
+        },
+        {
+            id: 3,
+            title: 'To be the best version of yourself',
+            isComplete: false
+        }
+    ]);
 
-    {
-      id: 2,
-      title: 'Go Grocery',
-      isComplete: true,
-    },
+    const [todoInput, setTodoInput] = useState('');
+    const [idForTodo, setIdForTodo] = useState(4);
+    console.log(todos);
 
-    {
-      id: 3,
-      title: 'Take over world', 
-      isComplete: false,
+    const addTodo = (event) => {
+        event.preventDefault();
+        setTodos([
+            ...todos, {
+                id: idForTodo,
+                title: todoInput,
+                isComplete: false
+            }
+        ]);
+        setIdForTodo(prevId => prevId + 1);
+        setTodoInput('');
+        
     }
-  ]);
 
-  const [todoInput, setTodoInput] = useState('');
-  const [idForTodo, setIdForTodo] = useState(4);
-
-
-  const addTodo = (event) => {
-    event.preventDefault();
-
-      if(todoInput.trim().length === 0){
-        return;
-      }
-
-    setTodos([...todos, {
-      id: idForTodo,
-      title: todoInput,
-      isComplete: false
-    }]);
-
-    setTodoInput('');
-
-    setIdForTodo(prevIdForTodo => prevIdForTodo + 1);
-  };
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter(todo => todo.id !== id))
-  } 
-
-  
-  function handleInput(event) {
-    setTodoInput(event.target.value)
-  }
+    const handleInput = (event) => {
+        setTodoInput(event.target.value)
+    }
 
   return (
     <div className=' h-full w-full absolute'>
@@ -63,17 +53,18 @@ export const App = () => {
           <form action="#" onSubmit={addTodo}>
             <motion.input type="text" className=' px-1 py-1 border w-full outline-none shadow-lg' placeholder='What do you need to do?' 
               whileHover={{ scale: 1.06 }}
-              value={todoInput}
               onChange={handleInput}
+              value={todoInput}
+              
             />  
           </form>  
         </div>
 
-       { todos.map((todo, index) => (
-        
-        <div key={todo.id} className="flex justify-between mt-6">
+      
+        { todos.map((todo, index) => (
+        <div className="flex justify-between mt-6">
           <div className='flex justify-between gap-4'>
-              <motion.input type="checkbox" className='w-5 '
+              <motion.input type="checkbox" className='w-5 ' 
                  whileHover={{ scale: 1.3 }}
                  whileTap={{ scale: 0.97 }}
               /> 
@@ -83,13 +74,12 @@ export const App = () => {
 
             <motion.button className='border px-2 text-white hover:border-3'
                whileHover={{ scale: 1.3 }}
-               whileTap={{ scale: 0.97 }}
-               onClick={() => deleteTodo(todo.id)} 
+               whileTap={{ scale: 0.1 }}
             
             >X</motion.button> 
         
-        </div>  ))}
-
+        </div>      
+                ))}
 
         <hr className='mt-4'/>
 
