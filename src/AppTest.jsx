@@ -9,17 +9,21 @@ export const App = () => {
             id: 1,
             title: 'To conquer the world',
             isComplete: false,
+            isEditing: false,
         },
         {
             id: 2, 
             title: 'To beat the assholes',
-            isComplete: false,
+            isComplete: true,
+            isEditing: false,
         },
         {
             id: 3,
             title: 'To be the best version of yourself',
-            isComplete: false
-        }
+            isComplete: false,
+            isEditing: false,
+        },
+        
     ]);
 
     const [todoInput, setTodoInput] = useState('');
@@ -28,6 +32,11 @@ export const App = () => {
 
     const addTodo = (event) => {
         event.preventDefault();
+
+        if(!todoInput){
+          return;
+        }
+
         setTodos([
             ...todos, {
                 id: idForTodo,
@@ -38,6 +47,34 @@ export const App = () => {
         setIdForTodo(prevId => prevId + 1);
         setTodoInput('');
         
+    }
+
+    const completeTodo = (id) => {
+      const updatedTodos = todos.map(todo => {
+        if(todo.id === id){
+          todo.isComplete = !todo.isComplete
+        }
+
+        return todo;
+      });
+
+      setTodos(updatedTodos);
+    }
+
+    const deleteTodo = (id) => {
+      setTodos(todos.filter(todo => todo.id !== id));
+    }
+
+    const markAsEditing = (id) => {
+      const updatedTodos = todos.map(todo => {
+        if(todo.id === id){
+          todo.isEditing = !todo.isEditing
+        }
+
+        return todo;
+      });
+
+      setTodos(updatedTodos);
     }
 
     const handleInput = (event) => {
@@ -64,17 +101,23 @@ export const App = () => {
         { todos.map((todo, index) => (
         <div className="flex justify-between mt-6">
           <div className='flex justify-between gap-4'>
-              <motion.input type="checkbox" className='w-5 ' 
+              <motion.input type="checkbox" className='w-5' onChange={() => completeTodo(todo.id)} 
                  whileHover={{ scale: 1.3 }}
                  whileTap={{ scale: 0.97 }}
+                 checked={todo.isComplete? true : false}
               /> 
-              <label htmlFor="" className='text-white'>{todo.title}</label>
-                    
+
+              { !todo.isEditing? ( 
+              <label htmlFor="" className={`text-white ${todo.isComplete? 'line-through' : ''}`} onDoubleClick={() => markAsEditing(todo.id)} >{todo.title}</label>) : 
+              (<input type="text" className='outline-none' value="Change the value" autoFocus/>)
+              }
             </div>
+
 
             <motion.button className='border px-2 text-white hover:border-3'
                whileHover={{ scale: 1.3 }}
-               whileTap={{ scale: 0.1 }}
+               whileTap={{ scale: 0.96 }}
+               onClick={() => deleteTodo(todo.id)}
             
             >X</motion.button> 
         

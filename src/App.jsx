@@ -8,23 +8,27 @@ export const App = () => {
       id: 1,
       title: 'Finished React Series',
       isComplete: false,
+      isEditing: false
     },
 
     {
       id: 2,
       title: 'Go Grocery',
       isComplete: true,
+      isEditing: false
     },
 
     {
       id: 3,
       title: 'Take over world', 
       isComplete: false,
+      isEditing: false
     }
   ]);
 
   const [todoInput, setTodoInput] = useState('');
   const [idForTodo, setIdForTodo] = useState(4);
+
 
 
   const addTodo = (event) => {
@@ -48,6 +52,73 @@ export const App = () => {
   const deleteTodo = (id) => {
     setTodos(todos.filter(todo => todo.id !== id))
   } 
+
+  const completeTodo = (id) => {
+    const updatedTodos = todos.map(todo => {
+      if(todo.id === id){
+        todo.isComplete = !todo.isComplete
+      }
+
+      return todo;
+
+      
+    });
+
+    setTodos(updatedTodos);
+  }
+
+  const markAsEditing = (id) => {
+    const updatedTodos = todos.map(todo => {
+      if(todo.id === id){
+        todo.isEditing = true;
+      }
+
+      return todo;
+
+      
+    });
+
+    setTodos(updatedTodos);
+  }
+
+ 
+
+
+  const updateTodo = (event,id) => {
+ 
+    const updatedTodos = todos.map(todo => {
+    
+    if(event.target.value.trim().length === 0){
+      todo.isEditing = false;
+      return todo;
+    }
+
+      if(todo.id === id){
+        todo.title = event.target.value
+        todo.isEditing = false;
+      }
+
+      return todo;
+
+      
+    });
+
+    setTodos(updatedTodos);
+  }
+
+  const cancelEdit = (event, id) => {
+    const updatedTodos = todos.map(todo => {
+      if(todo.id === id){
+        todo.isEditing = false;
+      }
+
+      return todo;
+
+      
+    });
+
+    setTodos(updatedTodos);
+  }
 
   
   function handleInput(event) {
@@ -73,13 +144,23 @@ export const App = () => {
         
         <div key={todo.id} className="flex justify-between mt-6">
           <div className='flex justify-between gap-4'>
-              <motion.input type="checkbox" className='w-5 '
+              <motion.input type="checkbox" className='w-5' onChange={() => completeTodo(todo.id)} checked={todo.isComplete ? true : false}
                  whileHover={{ scale: 1.3 }}
                  whileTap={{ scale: 0.97 }}
               /> 
-              <label htmlFor="" className='text-white'>{todo.title}</label>
-                    
-            </div>
+
+              { !todo.isEditing ? (  
+                <label htmlFor="" className={`text-white ${todo.isComplete ? 'line-through' : ''}`} onDoubleClick={() => markAsEditing(todo.id)}>{todo.title}</label> ) : (   
+                <input type="text" className='todo-item-input outline-none 
+                isEditing: false px-1' autoFocus defaultValue={todo.title} onBlur={(event) => updateTodo(event,todo.id)} onKeyDown={event => {
+                  if(event.key === 'Enter'){
+                    updateTodo(event,todo.id)
+                  } else if(event.key === 'Escape'){
+                    cancelEdit(event, todo.id)
+                  }
+                }} /> 
+              )}             
+          </div>
 
             <motion.button className='border px-2 text-white hover:border-3'
                whileHover={{ scale: 1.3 }}
@@ -124,8 +205,8 @@ export const App = () => {
               >Completed</motion.button>
           </div>
           
-          <motion.button className='border text-white px-1'
-              whileHover={{ scale: 1.2 }}
+          <motion.button className='border text-white px-1 md:px-3 py-1'
+              whileHover={{ scale: 1.15 }}
               whileTap={{ scale: 0.97 }}
           
           >Clear completed</motion.button>
