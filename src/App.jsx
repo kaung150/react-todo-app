@@ -4,6 +4,7 @@ import NoTodo from './NoTodo';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 
+
 export const App = () => {
 
   const [todos, setTodos] = useState([
@@ -119,6 +120,34 @@ export const App = () => {
     setTodos(updatedTodos);
   }
 
+  function remaining() {
+    return todos.filter(todo => !todo.isComplete).length;
+  }
+
+  function clearCompleted() {
+    setTodos([...todos].filter(todo => !todo.isComplete));
+  }
+
+  function completeAllTodos(){
+    const updatedTodos = todos.map(todo => {
+      
+        todo.isComplete = true;
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  }
+
+  function todosFiltered(filter){
+    if(filter === 'all') {
+      return todos;
+    }else if( filter === 'active' ){
+      return todos.filter(todo => !todo.isComplete)
+    }else if(filter === 'completed'){
+      return todos.filter(todo => todo.isComplete)
+    }
+  }
  
 
   return (
@@ -138,13 +167,18 @@ export const App = () => {
         updateTodo={updateTodo}
         cancelEdit={cancelEdit}
         deleteTodo={deleteTodo}
-        
+        remaining={remaining}
+        clearCompleted={clearCompleted}
+        completeAllTodos={completeAllTodos}
+        todosFiltered={todosFiltered}
         /> ) : (
           <div className="mt-5 container">
               <p className='text-lg text-indigo-200'>Add some todo...</p>
-            <div className='flex justify-center '>
+            <motion.div className='flex justify-center  '
+              whileHover={{ scale: 1.1 }}
+            >
               <NoTodo/>
-            </div>
+            </motion.div>
           </div>
         ) }              
       </div>

@@ -1,23 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {motion} from 'framer-motion';
 import TodoForm from './TodoForm';
+import {TodoItemsRemaining} from './TodoItemsRemaining';
 import PropTypes from 'prop-types';
+import TodoClearCompleted from './TodoClearCompleted';
+import TodoCompleteAllTodos from './TodoCompleteAllTodos';
+import TodoFilters from './TodoFilters';
+
 
 
 TodoList.propTypes = {
     todos: PropTypes.array.isRequired,
+    todosFiltered: PropTypes.func.isRequired,
     completeTodo: PropTypes.func.isRequired,
     markAsEditing: PropTypes.func.isRequired,
     updateTodo: PropTypes.func.isRequired,
     cancelEdit: PropTypes.func.isRequired,
     deleteTodo: PropTypes.func.isRequired,
-
+    remaining: PropTypes.func.isRequired,
+    clearCompleted: PropTypes.func.isRequired,
+    completeAllTodos: PropTypes.func.isRequired,
+    
 }
 
 export default function TodoList(props) {
+
+  const [filter, setFilter] = useState('all'); 
+
   return (
      <div>
-        { props.todos.map((todo, index) => (
+        { props.todosFiltered(filter).map((todo, index) => (
           
           <div key={todo.id} className="flex justify-between mt-6">
             <div className='flex justify-between gap-4'>
@@ -53,41 +65,22 @@ export default function TodoList(props) {
         <hr className='mt-4'/>
 
         <div className='flex justify-between text-white mt-3 items-center'>
-          <motion.button className='px-3 py-1 border border-white text-sm hover:shadow-lg'
-             whileHover={{ scale: 1.2 }}
-             whileTap={{ scale: 0.97 }}
-          
-          >Check All</motion.button>
-          <p>3 items remaining</p>
+          <TodoCompleteAllTodos completeAllTodos={props.completeAllTodos}/>
+          <TodoItemsRemaining remaining={props.remaining}/>
         </div>
 
         <hr className='mt-3'/>
 
         <div className='mt-3 flex justify-between items-center  '>
-          <div className='flex  gap-2'>
-                
-              <motion.button className='text-white  px-1 border'
-                 whileHover={{ scale: 1.2 }}
-                 whileTap={{ scale: 0.97 }}
-              
-              >All</motion.button>
-             <motion.button className='text-white  px-1 '
-                 whileHover={{ scale: 1.2 }}
-                 whileTap={{ scale: 0.97 }}
-              
-              >Active</motion.button>
-              <motion.button className='text-white  px-1 '
-                 whileHover={{ scale: 1.2 }}
-                 whileTap={{ scale: 0.97 }}
-              
-              >Completed</motion.button>
-          </div>
           
-          <motion.button className='border text-white px-1 md:px-3 py-1'
-              whileHover={{ scale: 1.15 }}
-              whileTap={{ scale: 0.97 }}
+          <TodoFilters 
+            todosFiltered={props.todosFiltered}
+            filter={filter}
+            setFilter={setFilter}
           
-          >Clear completed</motion.button>
+          />
+          
+          <TodoClearCompleted clearCompleted={props.clearCompleted}/>
         </div>
 
         </div>
