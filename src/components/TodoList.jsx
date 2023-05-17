@@ -7,7 +7,7 @@ import TodoClearCompleted from "./TodoClearCompleted";
 import TodoCompleteAllTodos from "./TodoCompleteAllTodos";
 import TodoFilters from "./TodoFilters";
 import useToggle from "../hooks/useToggle";
-import { TodosContext } from "../context/todosContext";
+import { TodosContext } from "../context/TodosContext";
 
 export default function TodoList() {
   const { todosFiltered, filter, todos, setTodos } = useContext(TodosContext);

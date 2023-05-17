@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
-import { TodosContext } from "../context/todosContext";
+import { TodosContext } from "../context/TodosContext";
 
 export const TodoClearCompleted = () => {
   const { todos, setTodos } = useContext(TodosContext);

@@ -4,7 +4,7 @@ import NoTodo from "./NoTodo";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
 import useLocalStorage from "./hooks/useLocalStorage";
-import { TodosContext } from "./context/todosContext";
+import { TodosContext } from "./context/TodosContext";
 
 export const App = () => {
   const [todos, setTodos] = useLocalStorage("todos", []);

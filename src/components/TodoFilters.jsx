@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
 
-import { TodosContext } from "../context/todosContext";
+import { TodosContext } from "../context/TodosContext";
 
 export const TodoFilters = () => {
   const { filter, setFilter, todosFiltered } = useContext(TodosContext);

@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import { TodosContext } from "../context/todosContext";
+import { TodosContext } from "../context/TodosContext";
 
 export const TodoCompleteAllTodos = () => {
   const { todos, setTodos } = useContext(TodosContext);

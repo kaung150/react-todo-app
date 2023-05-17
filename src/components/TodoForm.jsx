@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { motion } from "framer-motion";
 
-import { TodosContext } from "../context/todosContext";
+import { TodosContext } from "../context/TodosContext";
 
 export default function TodoForm() {
   const { todos, setTodos, idForTodo, setIdForTodo } = useContext(TodosContext);
