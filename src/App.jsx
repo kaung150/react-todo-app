@@ -66,10 +66,8 @@ export const App = () => {
       if (todo.id === id) {
         todo.isEditing = true;
       }
-
       return todo;
     });
-
     setTodos(updatedTodos);
   };
 
@@ -79,15 +77,12 @@ export const App = () => {
         todo.isEditing = false;
         return todo;
       }
-
       if (todo.id === id) {
         todo.title = event.target.value;
         todo.isEditing = false;
       }
-
       return todo;
     });
-
     setTodos(updatedTodos);
   };
 
@@ -136,28 +131,28 @@ export const App = () => {
   }
 
   useEffect(() => {
-    // console.log("use effect running");
+    console.log("use effect running");
 
     nameInputEl.current.focus();
 
     // return function cleanup() {
     //   console.log("cleaning up");
     // };
-  });
+  }, []);
 
   return (
     <div className=" h-full w-full absolute">
-      <div className="max-w-sm md:max-w-md lg:max-w-lg mx-auto mt-12 border px-8 py-10 bg-indigo-500">
+      <div className="max-w-sm md:max-w-md lg:max-w-lg mx-auto mt-12 border px-8 py-10 bg-indigo-500 rounded-lg">
         <div className="">
           <div>
-            <h2 className="text-white text-2xl mb-4 font-bold">
+            <h2 className="text-white text-2xl mb-3 font-bold">
               What is your name?
             </h2>
 
             <form action="">
               <motion.input
                 type="text"
-                className="py-1 w-full px-1 mb-2 outline-none"
+                className="py-1 w-full px-1 mb-2 outline-none rounded-md shadow-lg hover:shadow-xl"
                 placeholder="What is your name?"
                 whileHover={{ scale: 1.06 }}
                 value={name}
@@ -168,7 +163,7 @@ export const App = () => {
             {name && <p className="mb-4 text-white text-lg">Hello, {name}</p>}
           </div>
 
-          <h1 className="mb-3 text-white font-bold text-2xl">Todo App</h1>
+          <h1 className="mb-3 text-white font-bold text-2xl mt-4">Todo APP</h1>
           <TodoForm addTodo={addTodo} />
         </div>
 

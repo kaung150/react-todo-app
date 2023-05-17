@@ -59,7 +59,7 @@ export default function TodoList(props) {
                   if (event.key === "Enter") {
                     props.updateTodo(event, todo.id);
                   } else if (event.key === "Escape") {
-                    cancelEdit(event, todo.id);
+                    props.cancelEdit(event, todo.id);
                   }
                 }}
               />
@@ -67,7 +67,8 @@ export default function TodoList(props) {
           </div>
 
           <motion.button
-            className="border px-2 text-white hover:border-3"
+            className="border px-2 text-white hover:border-3 text-sm rounded-md
+            hover:border-2 hover:shadow-lg "
             whileHover={{ scale: 1.3 }}
             whileTap={{ scale: 0.97 }}
             onClick={() => props.deleteTodo(todo.id)}
@@ -77,7 +78,24 @@ export default function TodoList(props) {
         </div>
       ))}
 
-      <hr className="mt-4" />
+      <div className=" flex gap-2 mt-5">
+        <motion.button
+          className="text-white text-sm border rounded-md px-2 py-1 shadow-lg"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          Features One Toggle
+        </motion.button>
+        <motion.button
+          className="text-white text-sm border rounded-md px-2 py-1 shadow-lg"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.97 }}
+        >
+          Features Two Toggle
+        </motion.button>
+      </div>
+
+      <hr className="mt-2" />
 
       <div className="flex justify-between text-white mt-3 items-center">
         <TodoCompleteAllTodos completeAllTodos={props.completeAllTodos} />
