@@ -1,45 +1,48 @@
-import React from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
-import PropTypes from "prop-types";
 
-export const TodoFilters = (props) => {
+import { TodosContext } from "../context/todosContext";
+
+export const TodoFilters = () => {
+  const { filter, setFilter, todosFiltered } = useContext(TodosContext);
+
   return (
     <div className="flex  gap-2">
       <motion.button
         className={`text-white text-sm rounded-md  px-2 py-1 shadow-sm ${
-          props.filter === "all" ? "border" : ""
+          filter === "all" ? "border" : ""
         }`}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.97 }}
         onClick={() => {
-          props.setFilter("all");
-          props.todosFiltered("all");
+          setFilter("all");
+          todosFiltered();
         }}
       >
         All
       </motion.button>
       <motion.button
         className={`text-white text-sm rounded-md  px-2 py-1 shadow-sm ${
-          props.filter === "active" ? "border" : ""
+          filter === "active" ? "border" : ""
         }`}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.97 }}
         onClick={() => {
-          props.setFilter("active");
-          props.todosFiltered("active");
+          setFilter("active");
+          todosFiltered();
         }}
       >
         Active
       </motion.button>
       <motion.button
         className={`text-white text-sm rounded-md  px-2 py-1 shadow-sm ${
-          props.filter === "completed" ? "border" : ""
+          filter === "completed" ? "border" : ""
         }`}
         whileHover={{ scale: 1.2 }}
         whileTap={{ scale: 0.97 }}
         onClick={() => {
-          props.setFilter("completed");
-          props.todosFiltered("completed");
+          setFilter("completed");
+          todosFiltered();
         }}
       >
         Completed
@@ -49,9 +52,3 @@ export const TodoFilters = (props) => {
 };
 
 export default TodoFilters;
-
-TodoFilters.propTypes = {
-  todosFiltered: PropTypes.func.isRequired,
-  filter: PropTypes.string.isRequired,
-  setFilter: PropTypes.func.isRequired,
-};

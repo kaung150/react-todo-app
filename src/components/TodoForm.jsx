@@ -1,32 +1,39 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { motion } from "framer-motion";
-import PropTypes from "prop-types";
 
-TodoForm.propTypes = {
-  addTodo: PropTypes.func.isRequired,
-};
+import { TodosContext } from "../context/todosContext";
 
-export default function TodoForm(props) {
+export default function TodoForm() {
+  const { todos, setTodos, idForTodo, setIdForTodo } = useContext(TodosContext);
   const [todoInput, setTodoInput] = useState("");
 
   function handleInput(event) {
     setTodoInput(event.target.value);
   }
 
-  function handleSubmit(event) {
+  function addTodo(event) {
     event.preventDefault();
 
     if (todoInput.trim().length === 0) {
       return;
     }
 
-    props.addTodo(todoInput);
+    setTodos([
+      ...todos,
+      {
+        id: idForTodo,
+        title: todoInput,
+        isComplete: false,
+      },
+    ]);
+
+    setIdForTodo((prevIdForTodo) => prevIdForTodo + 1);
 
     setTodoInput("");
   }
 
   return (
-    <form action="#" onSubmit={handleSubmit}>
+    <form action="#" onSubmit={addTodo}>
       <motion.input
         type="text"
         className=" px-2 text-gray-500 py-1 border w-full outline-none shadow-lg rounded-md"

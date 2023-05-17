@@ -1,40 +1,82 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import TodoForm from "./TodoForm";
 import { TodoItemsRemaining } from "./TodoItemsRemaining";
-import PropTypes from "prop-types";
+
 import TodoClearCompleted from "./TodoClearCompleted";
 import TodoCompleteAllTodos from "./TodoCompleteAllTodos";
 import TodoFilters from "./TodoFilters";
 import useToggle from "../hooks/useToggle";
+import { TodosContext } from "../context/todosContext";
 
-TodoList.propTypes = {
-  todos: PropTypes.array.isRequired,
-  todosFiltered: PropTypes.func.isRequired,
-  completeTodo: PropTypes.func.isRequired,
-  markAsEditing: PropTypes.func.isRequired,
-  updateTodo: PropTypes.func.isRequired,
-  cancelEdit: PropTypes.func.isRequired,
-  deleteTodo: PropTypes.func.isRequired,
-  remaining: PropTypes.func.isRequired,
-  clearCompleted: PropTypes.func.isRequired,
-  completeAllTodos: PropTypes.func.isRequired,
-};
+export default function TodoList() {
+  const { todosFiltered, filter, todos, setTodos } = useContext(TodosContext);
 
-export default function TodoList(props) {
   const [isFeaturesOneVisible, setFeaturesOneVisible] = useToggle();
-  const [isFeaturesTwoVisible, setFeaturesTwoVisible] = useToggle(false);
-  const [filter, setFilter] = useState("all");
+  const [isFeaturesTwoVisible, setFeaturesTwoVisible] = useToggle();
+
+  const deleteTodo = (id) => {
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const completeTodo = (id) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isComplete = !todo.isComplete;
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  };
+
+  const markAsEditing = (id) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isEditing = true;
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+  };
+
+  const updateTodo = (event, id) => {
+    const updatedTodos = todos.map((todo) => {
+      if (event.target.value.trim().length === 0) {
+        todo.isEditing = false;
+        return todo;
+      }
+      if (todo.id === id) {
+        todo.title = event.target.value;
+        todo.isEditing = false;
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+  };
+
+  const cancelEdit = (event, id) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.isEditing = false;
+      }
+
+      return todo;
+    });
+
+    setTodos(updatedTodos);
+  };
 
   return (
     <div>
-      {props.todosFiltered(filter).map((todo, index) => (
+      {todosFiltered(filter).map((todo, index) => (
         <div key={todo.id} className="flex justify-between mt-6">
           <div className="flex justify-between gap-4">
             <motion.input
               type="checkbox"
               className="w-5"
-              onChange={() => props.completeTodo(todo.id)}
+              onChange={() => completeTodo(todo.id)}
               checked={todo.isComplete ? true : false}
               whileHover={{ scale: 1.3 }}
               whileTap={{ scale: 0.97 }}
@@ -46,7 +88,7 @@ export default function TodoList(props) {
                 className={`text-white ${
                   todo.isComplete ? "line-through" : ""
                 }`}
-                onDoubleClick={() => props.markAsEditing(todo.id)}
+                onDoubleClick={() => markAsEditing(todo.id)}
               >
                 {todo.title}
               </label>
@@ -57,12 +99,12 @@ export default function TodoList(props) {
                   isEditing: false px-1"
                 autoFocus
                 defaultValue={todo.title}
-                onBlur={(event) => props.updateTodo(event, todo.id)}
+                onBlur={(event) => updateTodo(event, todo.id)}
                 onKeyDown={(event) => {
                   if (event.key === "Enter") {
-                    props.updateTodo(event, todo.id);
+                    updateTodo(event, todo.id);
                   } else if (event.key === "Escape") {
-                    props.cancelEdit(event, todo.id);
+                    cancelEdit(event, todo.id);
                   }
                 }}
               />
@@ -75,7 +117,7 @@ export default function TodoList(props) {
             hover:border-2 hover:shadow-lg "
               whileHover={{ scale: 1.3 }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => props.markAsEditing(todo.id)}
+              onClick={() => markAsEditing(todo.id)}
             >
               E
             </motion.button>
@@ -85,7 +127,7 @@ export default function TodoList(props) {
             hover:border-2 hover:shadow-lg "
               whileHover={{ scale: 1.3 }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => props.deleteTodo(todo.id)}
+              onClick={() => deleteTodo(todo.id)}
             >
               X
             </motion.button>
@@ -116,8 +158,8 @@ export default function TodoList(props) {
 
       {isFeaturesOneVisible && (
         <div className="flex justify-between text-white mt-3 items-center">
-          <TodoCompleteAllTodos completeAllTodos={props.completeAllTodos} />
-          <TodoItemsRemaining remaining={props.remaining} />
+          <TodoCompleteAllTodos />
+          <TodoItemsRemaining />
         </div>
       )}
 
@@ -125,13 +167,9 @@ export default function TodoList(props) {
 
       {isFeaturesTwoVisible && (
         <div className="mt-3 flex justify-between items-center  ">
-          <TodoFilters
-            todosFiltered={props.todosFiltered}
-            filter={filter}
-            setFilter={setFilter}
-          />
+          <TodoFilters />
 
-          <TodoClearCompleted clearCompleted={props.clearCompleted} />
+          <TodoClearCompleted />
         </div>
       )}
     </div>
