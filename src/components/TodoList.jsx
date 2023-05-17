@@ -69,15 +69,27 @@ export default function TodoList(props) {
             )}
           </div>
 
-          <motion.button
-            className="border px-2 text-white hover:border-3 text-sm rounded-md
+          <div className="flex gap-2">
+            <motion.button
+              className="border px-2 text-white hover:border-3 text-sm rounded-md
             hover:border-2 hover:shadow-lg "
-            whileHover={{ scale: 1.3 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={() => props.deleteTodo(todo.id)}
-          >
-            X
-          </motion.button>
+              whileHover={{ scale: 1.3 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => props.markAsEditing(todo.id)}
+            >
+              E
+            </motion.button>
+
+            <motion.button
+              className="border px-2 text-white hover:border-3 text-sm rounded-md
+            hover:border-2 hover:shadow-lg "
+              whileHover={{ scale: 1.3 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={() => props.deleteTodo(todo.id)}
+            >
+              X
+            </motion.button>
+          </div>
         </div>
       ))}
 
