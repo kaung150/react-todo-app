@@ -6,6 +6,7 @@ import PropTypes from "prop-types";
 import TodoClearCompleted from "./TodoClearCompleted";
 import TodoCompleteAllTodos from "./TodoCompleteAllTodos";
 import TodoFilters from "./TodoFilters";
+import useToggle from "../hooks/useToggle";
 
 TodoList.propTypes = {
   todos: PropTypes.array.isRequired,
@@ -21,6 +22,8 @@ TodoList.propTypes = {
 };
 
 export default function TodoList(props) {
+  const [isFeaturesOneVisible, setFeaturesOneVisible] = useToggle();
+  const [isFeaturesTwoVisible, setFeaturesTwoVisible] = useToggle(false);
   const [filter, setFilter] = useState("all");
 
   return (
@@ -83,6 +86,7 @@ export default function TodoList(props) {
           className="text-white text-sm border rounded-md px-2 py-1 shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.97 }}
+          onClick={setFeaturesOneVisible}
         >
           Features One Toggle
         </motion.button>
@@ -90,6 +94,7 @@ export default function TodoList(props) {
           className="text-white text-sm border rounded-md px-2 py-1 shadow-lg"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.97 }}
+          onClick={setFeaturesTwoVisible}
         >
           Features Two Toggle
         </motion.button>
@@ -97,22 +102,26 @@ export default function TodoList(props) {
 
       <hr className="mt-2" />
 
-      <div className="flex justify-between text-white mt-3 items-center">
-        <TodoCompleteAllTodos completeAllTodos={props.completeAllTodos} />
-        <TodoItemsRemaining remaining={props.remaining} />
-      </div>
+      {isFeaturesOneVisible && (
+        <div className="flex justify-between text-white mt-3 items-center">
+          <TodoCompleteAllTodos completeAllTodos={props.completeAllTodos} />
+          <TodoItemsRemaining remaining={props.remaining} />
+        </div>
+      )}
 
-      <hr className="mt-3" />
+      {isFeaturesOneVisible && <hr className="mt-3" />}
 
-      <div className="mt-3 flex justify-between items-center  ">
-        <TodoFilters
-          todosFiltered={props.todosFiltered}
-          filter={filter}
-          setFilter={setFilter}
-        />
+      {isFeaturesTwoVisible && (
+        <div className="mt-3 flex justify-between items-center  ">
+          <TodoFilters
+            todosFiltered={props.todosFiltered}
+            filter={filter}
+            setFilter={setFilter}
+          />
 
-        <TodoClearCompleted clearCompleted={props.clearCompleted} />
-      </div>
+          <TodoClearCompleted clearCompleted={props.clearCompleted} />
+        </div>
+      )}
     </div>
   );
 }

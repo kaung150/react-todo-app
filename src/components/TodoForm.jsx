@@ -29,7 +29,7 @@ export default function TodoForm(props) {
     <form action="#" onSubmit={handleSubmit}>
       <motion.input
         type="text"
-        className=" px-1 py-1 border w-full outline-none shadow-lg rounded-md"
+        className=" px-2 text-gray-500 py-1 border w-full outline-none shadow-lg rounded-md"
         placeholder="What do you need to do?"
         whileHover={{ scale: 1.06 }}
         value={todoInput}

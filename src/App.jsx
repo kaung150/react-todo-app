@@ -3,34 +3,38 @@ import { motion } from "framer-motion";
 import NoTodo from "./NoTodo";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 export const App = () => {
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      title: "Finished React Series",
-      isComplete: false,
-      isEditing: false,
-    },
+  const [todos, setTodos] = useLocalStorage("todos", []);
 
-    {
-      id: 2,
-      title: "Go Grocery",
-      isComplete: true,
-      isEditing: false,
-    },
+  // const [todos, setTodos] = useState([
+  //   {
+  //     id: 1,
+  //     title: "Finished React Series",
+  //     isComplete: false,
+  //     isEditing: false,
+  //   },
 
-    {
-      id: 3,
-      title: "Take over world",
-      isComplete: false,
-      isEditing: false,
-    },
-  ]);
+  //   {
+  //     id: 2,
+  //     title: "Go Grocery",
+  //     isComplete: true,
+  //     isEditing: false,
+  //   },
 
-  const [idForTodo, setIdForTodo] = useState(4);
+  //   {
+  //     id: 3,
+  //     title: "Take over world",
+  //     isComplete: false,
+  //     isEditing: false,
+  //   },
+  // ]);
+
+  // const [idForTodo, setIdForTodo] = useState(4);
+  const [idForTodo, setIdForTodo] = useLocalStorage("idForTodo", 1);
   const nameInputEl = useRef(null);
-  const [name, setName] = useState("");
+  const [name, setName] = useLocalStorage("name", "");
 
   const addTodo = (todo) => {
     setTodos([
@@ -131,14 +135,17 @@ export const App = () => {
   }
 
   useEffect(() => {
-    console.log("use effect running");
-
     nameInputEl.current.focus();
-
+    // setName(JSON.parse(localStorage.getItem("name")) ?? "");
     // return function cleanup() {
     //   console.log("cleaning up");
     // };
   }, []);
+
+  function handleNameInput(event) {
+    setName(event.target.value);
+    // localStorage.setItem("name", JSON.stringify(event.target.value));
+  }
 
   return (
     <div className=" h-full w-full absolute">
@@ -152,11 +159,11 @@ export const App = () => {
             <form action="">
               <motion.input
                 type="text"
-                className="py-1 w-full px-1 mb-2 outline-none rounded-md shadow-lg hover:shadow-xl"
+                className="py-1 w-full px-2 mb-2 outline-none rounded-md shadow-lg hover:shadow-xl text-gray-500"
                 placeholder="What is your name?"
                 whileHover={{ scale: 1.06 }}
                 value={name}
-                onChange={(event) => setName(event.target.value)}
+                onChange={handleNameInput}
                 ref={nameInputEl}
               />
             </form>
