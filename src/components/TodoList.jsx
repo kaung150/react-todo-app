@@ -8,6 +8,7 @@ import TodoCompleteAllTodos from "./TodoCompleteAllTodos";
 import TodoFilters from "./TodoFilters";
 import useToggle from "../hooks/useToggle";
 import { TodosContext } from "../context/TodosContext";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 export default function TodoList() {
   const { todosFiltered, filter, todos, setTodos } = useContext(TodosContext);
@@ -69,71 +70,79 @@ export default function TodoList() {
   };
 
   return (
-    <div>
-      {todosFiltered(filter).map((todo, index) => (
-        <div key={todo.id} className="flex justify-between mt-6">
-          <div className="flex justify-between gap-4">
-            <motion.input
-              type="checkbox"
-              className="w-5"
-              onChange={() => completeTodo(todo.id)}
-              checked={todo.isComplete ? true : false}
-              whileHover={{ scale: 1.3 }}
-              whileTap={{ scale: 0.97 }}
-            />
+    <>
+      <TransitionGroup component="div">
+        {todosFiltered(filter).map((todo, index) => (
+          <CSSTransition
+            key={todo.id}
+            timeout={300}
+            classNames="slide-horizontal"
+          >
+            <div className="flex justify-between mt-6">
+              <div className="flex justify-between gap-4">
+                <motion.input
+                  type="checkbox"
+                  className="w-5"
+                  onChange={() => completeTodo(todo.id)}
+                  checked={todo.isComplete ? true : false}
+                  whileHover={{ scale: 1.3 }}
+                  whileTap={{ scale: 0.97 }}
+                />
 
-            {!todo.isEditing ? (
-              <label
-                htmlFor=""
-                className={`text-white ${
-                  todo.isComplete ? "line-through" : ""
-                }`}
-                onDoubleClick={() => markAsEditing(todo.id)}
-              >
-                {todo.title}
-              </label>
-            ) : (
-              <input
-                type="text"
-                className="todo-item-input outline-none 
+                {!todo.isEditing ? (
+                  <label
+                    htmlFor=""
+                    className={`text-white ${
+                      todo.isComplete ? "line-through" : ""
+                    }`}
+                    onDoubleClick={() => markAsEditing(todo.id)}
+                  >
+                    {todo.title}
+                  </label>
+                ) : (
+                  <input
+                    type="text"
+                    className="todo-item-input outline-none 
                   isEditing: false px-1"
-                autoFocus
-                defaultValue={todo.title}
-                onBlur={(event) => updateTodo(event, todo.id)}
-                onKeyDown={(event) => {
-                  if (event.key === "Enter") {
-                    updateTodo(event, todo.id);
-                  } else if (event.key === "Escape") {
-                    cancelEdit(event, todo.id);
-                  }
-                }}
-              />
-            )}
-          </div>
+                    autoFocus
+                    defaultValue={todo.title}
+                    onBlur={(event) => updateTodo(event, todo.id)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter") {
+                        updateTodo(event, todo.id);
+                      } else if (event.key === "Escape") {
+                        cancelEdit(event, todo.id);
+                      }
+                    }}
+                  />
+                )}
+              </div>
 
-          <div className="flex gap-2">
-            <motion.button
-              className="border px-2 text-white hover:border-3 text-sm rounded-md
+              <div className="flex gap-2">
+                <motion.button
+                  className="border px-2 text-white hover:border-3 text-sm rounded-md
             hover:border-2 hover:shadow-lg "
-              whileHover={{ scale: 1.3 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => markAsEditing(todo.id)}
-            >
-              E
-            </motion.button>
+                  whileHover={{ scale: 1.3 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => markAsEditing(todo.id)}
+                >
+                  E
+                </motion.button>
 
-            <motion.button
-              className="border px-2 text-white hover:border-3 text-sm rounded-md
+                <motion.button
+                  className="border px-2 text-white hover:border-3 text-sm rounded-md
             hover:border-2 hover:shadow-lg "
-              whileHover={{ scale: 1.3 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => deleteTodo(todo.id)}
-            >
-              X
-            </motion.button>
-          </div>
-        </div>
-      ))}
+                  whileHover={{ scale: 1.3 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => deleteTodo(todo.id)}
+                >
+                  X
+                </motion.button>
+              </div>
+            </div>
+          </CSSTransition>
+        ))}
+      </TransitionGroup>
 
       <div className=" flex gap-2 mt-5">
         <motion.button
@@ -156,22 +165,32 @@ export default function TodoList() {
 
       <hr className="mt-2" />
 
-      {isFeaturesOneVisible && (
+      <CSSTransition
+        in={isFeaturesOneVisible}
+        timeout={300}
+        classNames="slide-vertical"
+        unmountOnExit
+      >
         <div className="flex justify-between text-white mt-3 items-center">
           <TodoCompleteAllTodos />
           <TodoItemsRemaining />
         </div>
-      )}
+      </CSSTransition>
 
       {isFeaturesOneVisible && <hr className="mt-3" />}
 
-      {isFeaturesTwoVisible && (
+      <CSSTransition
+        in={isFeaturesTwoVisible}
+        timeout={300}
+        classNames="slide-vertical"
+        unmountOnExit
+      >
         <div className="mt-3 flex justify-between items-center  ">
           <TodoFilters />
 
           <TodoClearCompleted />
         </div>
-      )}
-    </div>
+      </CSSTransition>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
 import useLocalStorage from "./hooks/useLocalStorage";
 import { TodosContext } from "./context/TodosContext";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 
 export const App = () => {
   const [todos, setTodos] = useLocalStorage("todos", []);
@@ -92,7 +93,15 @@ export const App = () => {
                   ref={nameInputEl}
                 />
               </form>
-              {name && <p className="mb-4 text-white text-lg">Hello, {name}</p>}
+
+              <CSSTransition
+                in={name.length > 0}
+                timeout={300}
+                classNames="slide-vertical"
+                unmountOnExit
+              >
+                <p className="mb-4 text-white text-lg">Hello, {name}</p>
+              </CSSTransition>
             </div>
 
             <h1 className="mb-3 text-white font-bold text-2xl mt-4">
@@ -101,7 +110,30 @@ export const App = () => {
             <TodoForm />
           </div>
 
-          {todos.length > 0 ? (
+          <SwitchTransition mode="out-in">
+            <CSSTransition
+              key={todos.length > 0}
+              timeout={300}
+              classNames="slide-vertical"
+              unmountOnExit
+            >
+              {todos.length > 0 ? (
+                <TodoList />
+              ) : (
+                <div className="mt-5 container">
+                  <p className="text-lg text-indigo-200">Add some todo...</p>
+                  <motion.div
+                    className="flex justify-center  "
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <NoTodo />
+                  </motion.div>
+                </div>
+              )}
+            </CSSTransition>
+          </SwitchTransition>
+
+          {/* {todos.length > 0 ? (
             <TodoList />
           ) : (
             <div className="mt-5 container">
@@ -113,7 +145,33 @@ export const App = () => {
                 <NoTodo />
               </motion.div>
             </div>
-          )}
+          )} */}
+
+          {/* <CSSTransition
+            in={todos.length > 0}
+            timeout={300}
+            classNames="slide-vertical"
+            unmountOnExit
+          >
+            <TodoList />
+          </CSSTransition>
+
+          <CSSTransition
+            in={todos.length === 0}
+            timeout={300}
+            classNames="slide-vertical"
+            unmountOnExit
+          >
+            <div className="mt-5 container">
+              <p className="text-lg text-indigo-200">Add some todo...</p>
+              <motion.div
+                className="flex justify-center  "
+                whileHover={{ scale: 1.1 }}
+              >
+                <NoTodo />
+              </motion.div>
+            </div>
+          </CSSTransition> */}
         </div>
       </div>
     </TodosContext.Provider>

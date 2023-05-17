@@ -1,42 +1,43 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.slide-vertical-enter {
+  opacity: 0;
+  transform: translateY(-20px);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.slide-vertical-enter-active {
+  opacity: 1;
+  transition: all 300ms;
+  transform: translateY(0);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.slide-vertical-exit {
+  transform: translateY(0);
+  opacity: 1;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.slide-vertical-exit-active {
+  opacity: 0;
+  transition: all 300ms;
+  transform: translateY(-20px);
 }
 
-.card {
-  padding: 2em;
+.slide-horizontal-enter {
+  opacity: 0;
+  transform: translateX(20px);
 }
 
-.read-the-docs {
-  color: #888;
+.slide-horizontal-enter-active {
+  opacity: 1;
+  transition: all 300ms;
+  transform: translateX(0);
+}
+
+.slide-horizontal-exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.slide-horizontal-exit-active {
+  opacity: 0;
+  transition: all 300ms;
+  transform: translateX(20px);
 }
